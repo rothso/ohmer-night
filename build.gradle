@@ -1,0 +1,75 @@
+buildscript {
+    ext.kotlin_version = "1.0.3"
+
+    repositories {
+        mavenCentral()
+        maven { url "http://dev.imjac.in/maven" }
+        maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1" }
+    }
+    dependencies {
+        // Keep an eye on https://github.com/Open-RIO/GradleRIO/issues/11
+        classpath "jaci.openrio.gradle:GradleRIO:4.4.3"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'GradleRIO'
+
+group 'org.teamresistance.frc'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1" }
+    maven { url "http://first.wpi.edu/FRC/roborio/maven/release" }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Kotlin
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    // WPIlib
+    compile 'edu.wpi.first.wpilibj:wpilibJavaFinal:0.1.0-SNAPSHOT'
+
+    // Dagger 2
+    compile 'com.google.dagger:dagger:2.6.1'
+    kapt 'com.google.dagger:dagger-compiler:2.6.1'
+    compileOnly 'org.glassfish:javax.annotation:10.0-b28'
+}
+
+// https://kotlinlang.org/docs/reference/using-gradle.html#annotation-processing
+kapt {
+    generateStubs = true
+}
+// GradleRIO configurations and tasks
+gradlerio.robotClass = "org.teamresistance.frc.Robot"
+gradlerio.team = "86"
+gradlerio.rioIP = "10.00.86.2"
+
+def robotManifest = {
+    attributes 'Main-Class': 'edu.wpi.first.wpilibj.RobotBase'
+    attributes 'Robot-Class': gradlerio.robotClass
+}
+
+jar {
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    manifest robotManifest
+}
+
+task genJavadoc(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives genJavadoc
+}
+
+// Gradle wrapper task, specifies current Gradle version
+wrapper {
+    gradleVersion = '3.0'
+}
