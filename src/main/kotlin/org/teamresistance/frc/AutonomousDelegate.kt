@@ -4,17 +4,15 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.strongback.Strongback
-import org.teamresistance.frc.subsystem.antler.Antlers
 import org.teamresistance.frc.subsystem.shooter.Shooter
-import org.teamresistance.frc.subsystem.snorfler.Snorfler
 import org.teamresistance.frc.routine.auto.ScoringAutonomous
 import org.teamresistance.frc.subsystem.drive.DriveTrain
 import org.teamresistance.frc.defense.Defense
+import org.teamresistance.frc.subsystem.antlersnorfler.AntlerSnorfler
 
 class AutonomousDelegate(
-    private val antlers: Antlers,
+    private val antlerSnorfler: AntlerSnorfler,
     private val drive: DriveTrain,
-    private val snorfler: Snorfler,
     private val shooter: Shooter
 ) : RobotDelegate {
 
@@ -31,6 +29,6 @@ class AutonomousDelegate(
     val table = NetworkTable.getTable("Dummy table")
 
     // Run the scoring autonomous routine
-    Strongback.submit(ScoringAutonomous(drive, antlers, snorfler, shooter, defense, 0, 0, table))
+    Strongback.submit(ScoringAutonomous(drive, antlerSnorfler, shooter, defense, 0, 0, table))
   }
 }

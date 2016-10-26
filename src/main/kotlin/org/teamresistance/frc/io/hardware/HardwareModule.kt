@@ -8,17 +8,22 @@ import org.strongback.components.Motor
 import org.strongback.components.Solenoid
 import org.strongback.drive.TankDrive
 import org.strongback.hardware.Hardware
+import org.strongback.hardware.Hardware.Motors.victorSP
+import org.strongback.hardware.Hardware.Switches.normallyClosed
+import org.strongback.hardware.Hardware.Switches.normallyOpen
 import org.teamresistance.frc.io.hardware.HardwareConfig.ANTLERS_SOLENOID_CHANNEL
 import org.teamresistance.frc.io.hardware.HardwareConfig.DRIVE_MOTOR_CHANNEL_LEFT
 import org.teamresistance.frc.io.hardware.HardwareConfig.DRIVE_MOTOR_CHANNEL_RIGHT
 import org.teamresistance.frc.io.hardware.HardwareConfig.DRIVE_MOTOR_INVERTED_LEFT
 import org.teamresistance.frc.io.hardware.HardwareConfig.DRIVE_MOTOR_INVERTED_RIGHT
 import org.teamresistance.frc.io.hardware.HardwareConfig.SHOOTER_SOLENOID_CHANNEL
+import org.teamresistance.frc.io.hardware.HardwareConfig.SNORFLER_BALL_SENSOR_CHANNEL
+import org.teamresistance.frc.io.hardware.HardwareConfig.SNORFLER_BALL_SENSOR_INVERTED
+import org.teamresistance.frc.io.hardware.HardwareConfig.SNORFLER_MOVE_SOLENOID_CHANNEL
 import org.teamresistance.frc.io.hardware.HardwareConfig.SNORFLER_SPIN_MOTOR_CHANNEL
-import org.teamresistance.frc.subsystem.antler.Antlers
+import org.teamresistance.frc.subsystem.antlersnorfler.AntlerSnorfler
 import org.teamresistance.frc.subsystem.drive.DriveTrain
 import org.teamresistance.frc.subsystem.shooter.Shooter
-import org.teamresistance.frc.subsystem.snorfler.Snorfler
 import javax.inject.Singleton
 
 @Module
@@ -37,19 +42,23 @@ class HardwareModule {
 
   @Provides @Singleton
   fun provideDriveTrain(): DriveTrain {
-    val leftMotor = Hardware.Motors.victorSP(DRIVE_MOTOR_CHANNEL_LEFT).invertIf(DRIVE_MOTOR_INVERTED_LEFT)
-    val rightMotor = Hardware.Motors.victorSP(DRIVE_MOTOR_CHANNEL_RIGHT).invertIf(DRIVE_MOTOR_INVERTED_RIGHT)
+    val leftMotor = victorSP(DRIVE_MOTOR_CHANNEL_LEFT).invertIf(DRIVE_MOTOR_INVERTED_LEFT)
+    val rightMotor = victorSP(DRIVE_MOTOR_CHANNEL_RIGHT).invertIf(DRIVE_MOTOR_INVERTED_RIGHT)
     return DriveTrain(TankDrive(leftMotor, rightMotor), AHRS(SPI.Port.kMXP))
   }
 
   @Provides @Singleton
-  fun provideAntlers(): Antlers {
-    return Antlers(solenoid(ANTLERS_SOLENOID_CHANNEL, Solenoid.Direction.STOPPED))
-  }
-
-  @Provides @Singleton
-  fun provideSnorfler(): Snorfler {
-    return Snorfler(Hardware.Motors.victorSP(SNORFLER_SPIN_MOTOR_CHANNEL))
+  fun provideAntlerSnorfler(): AntlerSnorfler {
+    return AntlerSnorfler(
+        solenoid(ANTLERS_SOLENOID_CHANNEL, Solenoid.Direction.STOPPED),
+        victorSP(SNORFLER_SPIN_MOTOR_CHANNEL),
+        solenoid(SNORFLER_MOVE_SOLENOID_CHANNEL, Solenoid.Direction.STOPPED),
+        if (SNORFLER_BALL_SENSOR_INVERTED) {
+          normallyClosed(SNORFLER_BALL_SENSOR_CHANNEL)
+        } else {
+          normallyOpen(SNORFLER_BALL_SENSOR_CHANNEL)
+        }
+    )
   }
 
   @Provides @Singleton

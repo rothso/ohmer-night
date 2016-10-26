@@ -1,14 +1,13 @@
 package org.teamresistance.frc.defense
 
-import org.strongback.command.CommandGroup
-import org.strongback.components.Solenoid
-import org.teamresistance.frc.subsystem.antler.Antlers
-import org.teamresistance.frc.subsystem.antler.LowerAntlers
-import org.teamresistance.frc.subsystem.antler.RaiseAntlers
+import org.strongback.command.WorkaroundCommandGroup
+import org.teamresistance.frc.subsystem.antlersnorfler.AntlerSnorfler
+import org.teamresistance.frc.subsystem.antlersnorfler.LowerAntlers
+import org.teamresistance.frc.subsystem.antlersnorfler.RaiseAntlerSnorfler
 import org.teamresistance.frc.subsystem.drive.DriveTimed
 import org.teamresistance.frc.subsystem.drive.DriveTrain
 
-class CrossCheval(antlers: Antlers, drive: DriveTrain) : CommandGroup() {
+class CrossCheval(antlerSnorfler: AntlerSnorfler, drive: DriveTrain) : WorkaroundCommandGroup() {
 
   companion object {
     const private val CROSS_DELAY_SECONDS = 2.0
@@ -19,11 +18,11 @@ class CrossCheval(antlers: Antlers, drive: DriveTrain) : CommandGroup() {
   init {
     sequentially(
         simultaneously(
-            RaiseAntlers(antlers),
+            RaiseAntlerSnorfler(antlerSnorfler),
             DriveTimed(drive, CROSS_SPEED_ENTRANCE, CROSS_DELAY_SECONDS)
         ),
         DriveTimed(drive, CROSS_SPEED_MIDWAY, 1.75 /* ?? */),
-        LowerAntlers(antlers)
+        LowerAntlers(antlerSnorfler)
     )
   }
 }

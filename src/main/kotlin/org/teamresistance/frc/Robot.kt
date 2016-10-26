@@ -10,7 +10,7 @@ class Robot : IterativeRobot() {
 
   override fun robotInit() {
     // Configure Strongback logging verbosity; just for now, only record commands.
-    Strongback.configure().recordNoEvents().recordNoData().initialize()
+    Strongback.configure().recordCommands().recordNoData().recordNoEvents().initialize()
 
     // Instantiate hardware components, inject our delegates
     DaggerRobotComponent.builder().build().inject(this)
@@ -25,9 +25,14 @@ class Robot : IterativeRobot() {
     autonomousDelegate.onInit()
   }
 
+  override fun teleopInit() {
+    // Restart, because we may have just been in autonomous
+    Strongback.restart()
+    teleopDelegate.onInit()
+  }
+
   override fun disabledInit() {
     // Flush and kill commands
     Strongback.disable()
   }
 }
-

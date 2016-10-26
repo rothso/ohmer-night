@@ -17,8 +17,8 @@ object JoystickConfig {
   object CoDriver {
     const val BUTTON_SHOOT = 1
     const val BUTTON_SHOOT_OVERRIDE = 11
-    const val BUTTON_ANTLER = 4
-    const val BUTTON_SNORFLER = 3
+    const val BUTTON_TOGGLE_ANTLERS = 4
+    const val BUTTON_SNORFLER_SPIN = 3
     const val BUTTON_SNORFLER_REVERSE = 10
     const val BUTTON_FOOT_TOGGLE = 5
     const val BUTTON_LIFTER_TILT = 6

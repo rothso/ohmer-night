@@ -39,12 +39,22 @@ dependencies {
     compile 'com.google.dagger:dagger:2.6.1'
     kapt 'com.google.dagger:dagger-compiler:2.6.1'
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
+
+    // Unit testing
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.0-M2'
+    testCompile 'org.mockito:mockito-core:2.1.0-RC.1'
 }
 
 // https://kotlinlang.org/docs/reference/using-gradle.html#annotation-processing
 kapt {
     generateStubs = true
 }
+
+// Workaround to allow referencing generated Dagger files
+sourceSets {
+    main.java.srcDirs += [file("$buildDir/generated/source/kapt/main")]
+}
+
 // GradleRIO configurations and tasks
 gradlerio.robotClass = "org.teamresistance.frc.Robot"
 gradlerio.team = "86"
