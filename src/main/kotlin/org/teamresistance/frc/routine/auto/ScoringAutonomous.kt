@@ -1,9 +1,8 @@
 package org.teamresistance.frc.routine.auto
 
 import edu.wpi.first.wpilibj.networktables.NetworkTable
+import org.strongback.command.Command
 import org.strongback.command.CommandGroup
-import org.teamresistance.frc.defense.CrossCheval
-import org.teamresistance.frc.defense.Defense
 import org.teamresistance.frc.subsystem.antlersnorfler.AntlerSnorfler
 import org.teamresistance.frc.subsystem.antlersnorfler.LowerAntlers
 import org.teamresistance.frc.subsystem.antlersnorfler.RaiseAntlerSnorfler
@@ -15,7 +14,7 @@ import org.teamresistance.frc.subsystem.shooter.Shoot
 import org.teamresistance.frc.subsystem.shooter.Shooter
 
 class ScoringAutonomous(drive: DriveTrain, antlerSnorfler: AntlerSnorfler, shooter: Shooter,
-                        defense: Defense, gate: Int, goal: Int, contoursTable: NetworkTable) : CommandGroup() {
+                        crossDefense: Command, gate: Int, goal: Int, contoursTable: NetworkTable) : CommandGroup() {
 
   companion object {
     const private val DRIVE_SPEED = 0.65
@@ -39,12 +38,6 @@ class ScoringAutonomous(drive: DriveTrain, antlerSnorfler: AntlerSnorfler, shoot
   }
 
   init {
-    // For now, crash if defense is not Cheval
-    val crossDefense = when (defense) {
-      Defense.CHEVAL -> CrossCheval(antlerSnorfler, drive)
-      else -> throw UnsupportedOperationException("Auto defense $defense is not supported.")
-    }
-
     sequentially(
         simultaneously(
             // Drive to defenses
