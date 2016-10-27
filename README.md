@@ -1,15 +1,13 @@
 Ohmer Zoo
 ---
-
-<center>
-    <img src="https://avatars0.githubusercontent.com/u/1446536?v=3&s=80" alt="Kotlin" valign="10">
+<p align="center">
+    <img src="https://avatars0.githubusercontent.com/u/1446536?v=3&s=80" alt="Kotlin">
     <img src="https://avatars0.githubusercontent.com/u/12171519?v=3&s=100" alt="Strongback">
     <img src="https://avatars1.githubusercontent.com/u/124156?v=3&s=100" alt="Gradle">
-    <img src="http://junit.org/junit5/assets/img/junit5-logo.png" alt="Junit 4" height="80" valign="10">
+    <img src="http://junit.org/junit5/assets/img/junit5-logo.png" alt="Junit 5" width="80">
     <img src="https://avatars3.githubusercontent.com/u/2054056?v=3&s=100" alt="Mockito">
     <img src="https://avatars1.githubusercontent.com/u/10563009?v=3&s=100" alt="GradleRIO">
-</center>
-
+</p>
 > A *laissez-faire* ("let them do") FRC robot created to explore and  evaluate several libraries and practices by playing with them.
 
 This robot is a rewrite of [Ohmer 2016](https://github.com/teamresistance/ohmer-2016), our robot for the 2016 Stronghold game.
